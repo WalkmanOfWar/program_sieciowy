@@ -34,7 +34,7 @@ public class Client {
             Scanner scanner = new Scanner(System.in);
             while (socket.isConnected()){
                 String messageToSend = scanner.nextLine();
-                bufferedWriter.write(username + ": " + messageToSend);
+                bufferedWriter.write(messageToSend);
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
             }
@@ -56,12 +56,18 @@ public class Client {
                             LocalDateTime from = LocalDateTime.parse(end, formatter);
                             LocalDateTime to = LocalDateTime.now();
                             Duration duration = Duration.between(to, from);
-                            System.out.println(duration.getSeconds());
-                            Thread.sleep(duration.getSeconds()*1000);
+                            if (duration.isNegative())
+                                throw new invalidDateException("Invalid Date, try again");
+                            else{
+                                System.out.println(duration.getSeconds());
+                                Thread.sleep(duration.getSeconds()*1000);
+                            }
                         }
                         System.out.println(msgFromGroupChat);
                     }catch (IOException | InterruptedException e) {
                         closeEverything(socket, bufferedReader, bufferedWriter);
+                    } catch (invalidDateException e) {
+                        System.err.print(e);
                     }
                 }
             }
