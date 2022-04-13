@@ -57,7 +57,7 @@ public class Client {
                             LocalDateTime to = LocalDateTime.now();
                             Duration duration = Duration.between(to, from);
                             if (duration.isNegative())
-                                throw new invalidDateException("Invalid Date, try again");
+                                throw new invalidDateException("Earlier date than it is now");
                             else{
                                 //System.out.println(duration.getSeconds());
                                 Thread.sleep(duration.getSeconds()*1000);
