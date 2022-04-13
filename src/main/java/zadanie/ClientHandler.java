@@ -19,7 +19,6 @@ public class ClientHandler implements Runnable{
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientUsername = bufferedReader.readLine();
             clientHandlers.add(this);
-            broadcastMessage("Server: " + clientUsername + " has entered the chat!");
         }catch (IOException e){
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -32,7 +31,7 @@ public class ClientHandler implements Runnable{
         while (socket.isConnected()){
             try {
                 messageFromClient = bufferedReader.readLine();
-                broadcastMessage(messageFromClient);
+                broadcastMessageToOneClient(messageFromClient);
             }catch (IOException e){
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 break;
@@ -40,13 +39,14 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    public  void broadcastMessage(String messageToSend){
+    public  void broadcastMessageToOneClient(String messageToSend){
         for (ClientHandler clientHandler:clientHandlers){
             try {
-                if (!clientHandler.clientUsername.equals(clientUsername)){
+                if (clientHandler.clientUsername.equals(clientUsername)){
                     clientHandler.bufferedWriter.write(messageToSend);
                     clientHandler.bufferedWriter.newLine();
                     clientHandler.bufferedWriter.flush();
+                    break;
                 }
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
@@ -55,7 +55,6 @@ public class ClientHandler implements Runnable{
     }
     public void removeClientHandler(){
         clientHandlers.remove(this);
-        broadcastMessage("Server: " + clientUsername + " has left the chat!");
     }
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter){
         removeClientHandler();

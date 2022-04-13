@@ -20,11 +20,10 @@ public class Server {
                 Socket socket = serverSocket.accept(); //czeka w nieskonczoność aż jakiś klient się połączy
                 System.out.println("New client has connected");
                 ClientHandler clientHandler = new ClientHandler(socket); // każdy objekt tej klasy będzie odpowiedzialny za komunikację
-
                 Thread thread = new Thread(clientHandler);
                 thread.start();
             }
-        }catch (IOException e){
+        }catch (IOException ignored){
 
         }
     }

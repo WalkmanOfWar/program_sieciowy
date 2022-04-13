@@ -59,10 +59,11 @@ public class Client {
                             if (duration.isNegative())
                                 throw new invalidDateException("Invalid Date, try again");
                             else{
-                                System.out.println(duration.getSeconds());
+                                //System.out.println(duration.getSeconds());
                                 Thread.sleep(duration.getSeconds()*1000);
                             }
-                        }
+                        }else
+                            throw new invalidDateException("Input doesn't have a date");
                         System.out.println(msgFromGroupChat);
                     }catch (IOException | InterruptedException e) {
                         closeEverything(socket, bufferedReader, bufferedWriter);
@@ -91,7 +92,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your username for the group chat: ");
+        System.out.println("Enter your username: ");
         String username = scanner.nextLine();
         Socket socket = new Socket("localhost", 1234);
         Client client = new Client(socket, username);
